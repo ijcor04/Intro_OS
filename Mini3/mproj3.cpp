@@ -1,8 +1,7 @@
 //Isaiah Corrales
 //Mini Project 3 
 //CMPS-4103-101, INTRO OS
-//This program will simulate 64KB of virtual memory, it will use a page system of size 1024 bytes per.
-//It will analyze a file given by Dr. Passos, determine what operations to perform, 
+//This program will analyze a paged memory system file given by Dr. Passos, determine what operations to perform, 
 //determine number of page faults and also utilize a second chance algorithm...
 //if there needs to be a a page replaced.
 #include <iostream>
@@ -11,7 +10,8 @@
 #include <algorithm>
 using namespace std;
 
-class Page {
+class Page 
+{
 public:
     unsigned int pageNumber;
     bool referenced;
@@ -19,29 +19,36 @@ public:
     Page(unsigned int num) : pageNumber(num), referenced(false) {}
 };
 
-class PageFaultAnalyzer {
+class PageFaultAnalyzer 
+{
 private:
     vector<Page> frames;
     int maxFrames;
     int pageFaults;
     
-    bool isPageInMemory(unsigned int pageNumber) {
+    bool isPageInMemory(unsigned int pageNumber) 
+    {
         return find_if(frames.begin(), frames.end(),
             [pageNumber](const Page& p) { return p.pageNumber == pageNumber; }) != frames.end();
     }
     
-    void addPage(unsigned int pageNumber) {
+    void addPage(unsigned int pageNumber) 
+    {
         // If there's still space in frames
-        if (frames.size() < maxFrames) {
+        if (frames.size() < maxFrames) 
+        {
             frames.push_back(Page(pageNumber));
             pageFaults++;
             return;
         }
         
         // Use Second Chance algorithm
-        while (true) {
-            for (auto& page : frames) {
-                if (!page.referenced) {
+        while (true) 
+        {
+            for (auto& page : frames) 
+            {
+                if (!page.referenced) 
+                {
                     page.pageNumber = pageNumber;
                     page.referenced = false;
                     pageFaults++;
@@ -53,34 +60,43 @@ private:
     }
 
 public:
-    PageFaultAnalyzer(int physicalMemorySize, int pageSize) {
+    PageFaultAnalyzer(int physicalMemorySize, int pageSize) 
+    {
         maxFrames = physicalMemorySize / pageSize;
         pageFaults = 0;
     }
     
-    void processAddress(unsigned int address) {
+    void processAddress(unsigned int address) 
+    {
         unsigned int pageNumber = address / 1024;  // 1024 is page size
         
-        if (!isPageInMemory(pageNumber)) {
+        if (!isPageInMemory(pageNumber)) 
+        {
             addPage(pageNumber);
-        } else {
+        } 
+        else 
+        {
             // Set referenced bit for Second Chance algorithm
             auto it = find_if(frames.begin(), frames.end(),
                 [pageNumber](Page& p) { return p.pageNumber == pageNumber; });
-            if (it != frames.end()) {
+            if (it != frames.end()) 
+            {
                 it->referenced = true;
             }
         }
     }
     
-    int getPageFaults() const {
+    int getPageFaults() const 
+    {
         return pageFaults;
     }
 };
 
-int main() {
+int main() 
+{
     ifstream inFile("input.txt");
-    if (!inFile) {
+    if (!inFile) 
+    {
         cout << "Error opening input file" << endl;
         return 1;
     }
@@ -92,7 +108,8 @@ int main() {
     unsigned int address;
     
     // Read hexadecimal addresses
-    while (inFile >> code >> hex >> address) {
+    while (inFile >> code >> hex >> address) 
+    {
         analyzer.processAddress(address);
     }
     
