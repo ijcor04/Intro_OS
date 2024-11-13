@@ -1,3 +1,10 @@
+//Isaiah Corrales
+//Mini Project 3 
+//CMPS-4103-101, INTRO OS
+//This program will simulate 64KB of virtual memory, it will use a page system of size 1024 bytes per.
+//It will analyze a file given by Dr. Passos, determine what operations to perform, 
+//determine number of page faults and also utilize a second chance algorithm...
+//if there needs to be a a page replaced.
 #include <iostream>
 #include <fstream>
 #include <vector>
